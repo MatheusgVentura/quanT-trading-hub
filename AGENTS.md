@@ -1,70 +1,88 @@
-# AGENTS.md - Estado do Projeto, Progresso e Próximos Passos
+# AGENTS.md - Repository Standards, Rules, and Conventions
 
-Documento de sincronização e controle de estado para agentes e desenvolvedores do repositório **quanT-trading-hub**.
-
----
-
-## 1. Visão Geral do Projeto
-* **Objetivo:** Criação de um hub quantitativo modular em Python para engenharia de bots de trading, motor de backtesting com custos da B3, gerenciamento de risco e execução em sandbox/paper trading.
-* **Metodologia:** Spec-Driven Development (SDD).
-* **Fase Atual:** Fase 3 — Especificação Técnica da Interface Base de Estratégias e Estratégia EMA (`src/strategies/`).
+Documento de referência permanente contendo regras estáveis, convenções de arquitetura, padrões de engenharia e comandos úteis para o repositório **quanT-trading-hub**.
 
 ---
 
-## 2. Mapa de Fases e Backlog
+## 1. Fluxo de Desenvolvimento de Funcionalidades (Spec-Driven Development)
 
-| Fase | Descrição | Status |
-| :--- | :--- | :--- |
-| **Fase 0** | Definição de regras (SDD), inicialização de `CLAUDE.md`, `AGENTS.md` e ambiente base | ✅ Concluído |
-| **Fase 1** | Especificação Técnica e Implementação do Módulo de Dados (`src/data/`) | ✅ Concluído |
-| **Fase 2** | Especificação Técnica e Implementação do Motor de Backtest Vetorizado (`src/backtest/`) | ✅ Concluído |
-| **Fase 3** | Especificação Técnica e Implementação da Interface Base de Estratégias e Estratégia EMA | 🟡 Especificação em Elaboração |
-| **Fase 4** | Especificação Técnica e Implementação do Módulo de Gestão de Risco (`src/risk/`) | ⏳ Pendente |
-| **Fase 5** | Especificação Técnica e Implementação de Paper Trading / Execução em Sandbox (`src/execution/`) | ⏳ Pendente |
-| **Fase 6** | Dashboard Interativo Web (Streamlit / Plotly) | ⏳ Pendente |
-
----
-
-## 3. Log de Entregas e Decisões Técnicas
-
-### [05/11/2026] - Setup Inicial de Governança
-* **Decisão:** Adoção estrita da metodologia Spec-Driven Development (SDD).
-* **Ações Realizadas:**
-  * Criação do [CLAUDE.md](file:///c:/Users/Matheus%20Ventura/personal/quanT-trading-hub/CLAUDE.md) com diretrizes de arquitetura, stack (Python 3.10) e comandos úteis.
-  * Criação do [AGENTS.md](file:///c:/Users/Matheus%20Ventura/personal/quanT-trading-hub/AGENTS.md) com roadmap e rastreamento de entregas.
-  * Validação das versões de Python disponíveis no host (Python 3.10 e 3.14 detectados).
-
-### [05/11/2026] - Conclusão da Fase 1: Módulo de Infraestrutura de Dados (`src/data/`)
-* **Especificação:** [01_data_infrastructure.md](file:///c:/Users/Matheus%20Ventura/personal/quanT-trading-hub/specs/01_data_infrastructure.md) aprovada pelo usuário.
-* **Componentes Implementados:**
-  * `src/data/exceptions.py`: Hierarquia de exceções (`DataError`, `DataDownloadError`, `DataValidationError`, `TickerNotFoundError`).
-  * `src/data/interfaces.py`: Contrato formal `IDataProvider` para desacoplamento de fontes de dados.
-  * `src/data/validator.py`: Quality gate `OHLCVValidator` com checagem de tipos, colunas, física de preços ($High \ge Low$, $Close > 0$) e volume não-negativo.
-  * `src/data/cache.py`: `DataCacheManager` baseado em Parquet e TTL para otimização de requisições.
-  * `src/data/yfinance_provider.py`: Implementação concreta para Yahoo Finance com suporte a ativos B3 (`.SA`).
-* **Qualidade e Testes:**
-  * 16 testes unitários com mocks passando com 100% de sucesso.
-  * Cobertura de testes do módulo `src/data/`: 88% (acima da meta de 85%).
-  * Checagem de tipagem estática `mypy src`: 0 erros.
-  * Smoke test executado em produção com dados reais de `ITUB4.SA`.
-
-### [05/11/2026] - Conclusão da Fase 2: Motor de Backtesting Vetorizado (`src/backtest/`)
-* **Especificação:** [02_vectorized_backtest_engine.md](file:///c:/Users/Matheus%20Ventura/personal/quanT-trading-hub/specs/02_vectorized_backtest_engine.md) aprovada pelo usuário.
-* **Componentes Implementados:**
-  * `src/backtest/models.py`: Modelos imutáveis `BacktestConfig`, `BacktestMetrics` e `BacktestResult` com relatório institucional via `summary()`.
-  * `src/backtest/exceptions.py`: Exceções de simulação (`BacktestError`, `MismatchedIndexError`, `InvalidSignalError`).
-  * `src/backtest/metrics.py`: `MetricsCalculator` estático e puro para cálculo de Sharpe, Sortino, CAGR, Max Drawdown, Profit Factor e Win Rate.
-  * `src/backtest/engine.py`: `VectorizedBacktestEngine` com proteção mandatória contra *Look-Ahead Bias* (`.shift(1)`), cálculo de fricção B3 (~0,03% por giro) e retornos líquidos.
-* **Qualidade e Testes:**
-  * 28 testes unitários passando com 100% de sucesso (12 novos testes em `tests/unit/test_backtest/`).
-  * Cobertura de testes global: 90% (acima da meta de 85%).
-  * Tipagem estática `mypy src`: 0 erros em 12 arquivos.
-  * Teste end-to-end de integração executado com sucesso cruzando `YFinanceDataProvider` com a engine em dados de 2 anos de `ITUB4.SA`.
+1. **Spec Obrigatória:** Toda funcionalidade inicia em `specs/<NNN-nome>/spec.md` contendo:
+   * Objetivo (*Objective*)
+   * Fora de escopo (*Out of Scope*)
+   * Critérios de aceite numerados e verificáveis (*Acceptance Criteria*)
+   * Casos de borda (*Edge Cases*)
+   * Contratos e modelos de dados (*Contracts / Data Models*)
+   * Riscos de abuso e segurança (*Abuse & Security Risks*)
+   * Perguntas em aberto (*Open Questions*)
+   * Suposições assumidas (*Assumptions Made*)
+2. **Plano e Decomposição:**
+   * `specs/<NNN-nome>/plan.md`: Decisões técnicas e alternativas descartadas.
+   * `specs/<NNN-nome>/tasks.md`: Lista ordenada de tarefas pequenas, cada uma vinculada a um ou mais critérios de aceite.
+3. **Aprovação Explícita:** Apresentar suposições e dúvidas e **PARAR**. O desenvolvimento só inicia quando o usuário responder estritamente `"aprovado"`.
+4. **Implementação Guiada por Testes:** Executar uma tarefa por vez do `tasks.md`, derivando os testes diretamente dos critérios de aceite.
+5. **Fechamento Atômico:** Uma entrega = uma tarefa do `tasks.md` concluída. Atualizar `tasks.md` e `PROGRESS.md` editando apenas o necessário.
 
 ---
 
-## 4. Próximos Passos Imediatos
-1. Elaborar a **Especificação Técnica da Fase 3 (Interface Base de Estratégias e Estratégia EMA Cross em `src/strategies/`)**.
-2. Apresentar a especificação ao usuário para alinhamento e aprovação prévia.
-3. Após aprovação, implementar os testes e os módulos de `src/strategies/`.
+## 2. Regras de Conduta e Governança
 
+* **Ajuste de Spec em Voo:** Se a spec estiver errada ou incompleta durante a implementação, **PARE**, descreva a divergência, proponha o ajuste e aguarde aprovação. Nunca contorne limitações da spec silenciosamente no código.
+* **Isolamento de Escopo:** Não altere arquivos ou comportamentos fora do escopo estrito da tarefa atual. Apontamentos adicionais devem ser registrados no `PROGRESS.md`.
+* **Ambiguidade:** Pergunte explicitamente antes de assumir premissas não documentadas.
+* **Ajuste Trivial:** Alterações mínimas (correção de typo, ajuste de 1 linha de config) devem ser descritas em 2-3 linhas e executadas diretamente.
+
+---
+
+## 3. Padrões de Qualidade e Stack Tecnológica
+
+### 3.1 Stack
+* **Python:** 3.10+
+* **Core Científico:** `pandas`, `numpy`, `yfinance`, `pyarrow`
+* **Qualidade e Testes:** `pytest`, `pytest-cov`, `mypy`, `ruff`
+
+### 3.2 Critérios de Conclusão de Tarefa
+Uma tarefa só é considerada concluída após rodar e exibir a saída de:
+1. Formatação e Linting: `ruff check .` e `ruff format --check .`
+2. Tipagem Estática Estrita: `mypy --strict src tests`
+3. Testes Unitários: `pytest --cov=src -v`
+* **Vínculo Teste-Critério:** Cada critério de aceite deve ter pelo menos um teste unitário correspondente, referenciando o número do critério no nome ou docstring (ex: `test_ac01_...`).
+
+---
+
+## 4. Segurança e Variáveis de Ambiente
+
+* **Zero Segredos:** Nenhuma chave, credencial ou segredo pode ser versionado no código ou em mensagens de commit.
+* **Gestão de Ambiente:** Variáveis de ambiente sensíveis residem em `.env` (ignorado no `.gitignore`). Usar `.env.example` como gabarito público.
+* **Sanitização de Dados:** Toda entrada externa (APIs, feeds de rede, arquivos em disco) deve passar por validação de formato e limites antes de entrar na camada de domínio.
+
+---
+
+## 5. Convenções de Idioma e Git
+
+* **Comunicação:** Conversas e alinhamentos em **Português (BR)**.
+* **Artefatos Técnicos:** Código-fonte, docstrings, nomes de testes, commits e arquivos dentro de `specs/` estritamente em **Inglês**.
+* **Padrão de Commits (Conventional Commits):**
+  * `feat(scope): ...`
+  * `test(scope): ...`
+  * `chore(scope): ...`
+  * `docs(scope): ...`
+  * `fix(scope): ...`
+
+---
+
+## 6. Comandos Úteis (PowerShell / Windows)
+
+```powershell
+# Ativação do ambiente virtual
+.\venv\Scripts\Activate.ps1
+
+# Formatação e Linting
+.\venv\Scripts\ruff check .
+.\venv\Scripts\ruff format .
+
+# Verificação de Tipagem Estrita
+.\venv\Scripts\mypy --strict src tests
+
+# Suíte de Testes com Cobertura
+.\venv\Scripts\pytest --cov=src -v
+```
