@@ -5,9 +5,9 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 ---
 
 ## 1. Estado Atual
-* **Fase Atual:** Fase 3 — Camada de Estratégias (`specs/003-strategy-layer/`). Task 3.2 concluída.
+* **Fase Atual:** Fase 3 — Camada de Estratégias (`specs/003-strategy-layer/`). Tasks 3.1 a 3.4 concluídas.
 * **Branch Ativo:** `main`
-* **Status Geral da Cobertura de Testes:** 34 testes passando (91% de cobertura global).
+* **Status Geral da Cobertura de Testes:** 50 testes passando (91% de cobertura global).
 * **Bloqueios:** Nenhum.
 
 ---
@@ -19,7 +19,7 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 | **000** | Setup de Governança, Regras e Stack Base | ✅ Concluído |
 | **001** | Infraestrutura e Padronização de Dados de Mercado (`src/data/`) | ✅ Concluído (`specs/001-data-infrastructure/`) |
 | **002** | Motor de Backtesting Vetorizado e Métricas (`src/backtest/`) | ✅ Concluído (`specs/002-vectorized-backtest/`) |
-| **003** | Camada Base de Estratégias e Estratégia EMA (`src/strategies/`) | 🔄 Em Implementação (Tasks 3.1 e 3.2 concluídas) |
+| **003** | Camada Base de Estratégias e Estratégia EMA (`src/strategies/`) | 🔄 Em Implementação (Tasks 3.1 a 3.4 concluídas) |
 | **004** | Gestão de Risco e Disjuntor Operacional (`src/risk/`) | ⏳ Pendente |
 | **005** | Execução e Sandbox / Paper Trading (`src/execution/`) | ⏳ Pendente |
 | **006** | Dashboard Web Interativo (Streamlit / Plotly) | ⏳ Pendente |
@@ -43,13 +43,12 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 * `ruff check .` e `ruff format --check .`: 100% aprovado (0 avisos).
 * `pytest --cov=src -v`: 28 testes passando com 90% de cobertura.
 
-### [05/11/2026] - Fase 3 / Tasks 3.1 e 3.2: Camada de Estratégias
-* Implementada hierarquia `StrategyError`, `InvalidParameterError`, `InsufficientDataError`.
-* Implementado contrato base abstrato `BaseStrategy` e testes derivados de AC06, AC07, AC08, AC09, AC12. Cobertura: 91%.
+### [05/11/2026] - Fase 3 / Tasks 3.1 a 3.4: Implementação da Estratégia EMA Crossover
+* Implementada `EMACrossoverStrategy` com validação $fast \ge 2, slow > fast$, `min_periods=slow_period` e sinais binários $\{0, 1\}$.
+* Cobertura de 100% em `src/strategies/ema_crossover.py` e 50 testes passando em toda a suíte.
 
 ---
 
 ## 4. Próximos Passos Imediatos
-1. Implementar Task 3.3: `EMACrossoverStrategy` em `src/strategies/ema_crossover.py` *(AC01, AC02, AC08-AC12)*.
-2. Implementar testes unitários para a estratégia em `tests/unit/test_strategies/test_ema_crossover.py`.
-3. Implementar Task 3.5: Validação da estratégia com os 4 ativos B3 e recorte de warm-up.
+1. Implementar Task 3.5: Backtest runner / testes de integração comparando os 4 ativos B3 (`ITUB4.SA`, `PETR4.SA`, `VALE3.SA`, `WEGE3.SA`) com e sem taxas B3 (0,03%) e recorte de warm-up *(AC03, AC04, AC05, AC13)*.
+2. Executar Task 3.6: Validação completa de qualidade (`ruff`, `mypy --strict`, `pytest`).
