@@ -5,9 +5,9 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 ---
 
 ## 1. Estado Atual
-* **Fase Atual:** Fase 3 — Camada de Estratégias (`specs/003-strategy-layer/`). Tasks 3.1 a 3.4 concluídas.
+* **Fase Atual:** Fase 3 Concluída — Camada de Estratégias (`specs/003-strategy-layer/`). Próxima: Fase 4 (`specs/004-risk-management/`).
 * **Branch Ativo:** `main`
-* **Status Geral da Cobertura de Testes:** 50 testes passando (91% de cobertura global).
+* **Status Geral da Cobertura de Testes:** 58 testes passando (93% de cobertura global).
 * **Bloqueios:** Nenhum.
 
 ---
@@ -19,8 +19,8 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 | **000** | Setup de Governança, Regras e Stack Base | ✅ Concluído |
 | **001** | Infraestrutura e Padronização de Dados de Mercado (`src/data/`) | ✅ Concluído (`specs/001-data-infrastructure/`) |
 | **002** | Motor de Backtesting Vetorizado e Métricas (`src/backtest/`) | ✅ Concluído (`specs/002-vectorized-backtest/`) |
-| **003** | Camada Base de Estratégias e Estratégia EMA (`src/strategies/`) | 🔄 Em Implementação (Tasks 3.1 a 3.4 concluídas) |
-| **004** | Gestão de Risco e Disjuntor Operacional (`src/risk/`) | ⏳ Pendente |
+| **003** | Camada Base de Estratégias e Estratégia EMA (`src/strategies/`) | ✅ Concluído (`specs/003-strategy-layer/`) |
+| **004** | Gestão de Risco e Disjuntor Operacional (`src/risk/`) | ⏳ Pendente de Especificação |
 | **005** | Execução e Sandbox / Paper Trading (`src/execution/`) | ⏳ Pendente |
 | **006** | Dashboard Web Interativo (Streamlit / Plotly) | ⏳ Pendente |
 
@@ -43,12 +43,17 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 * `ruff check .` e `ruff format --check .`: 100% aprovado (0 avisos).
 * `pytest --cov=src -v`: 28 testes passando com 90% de cobertura.
 
-### [05/11/2026] - Fase 3 / Tasks 3.1 a 3.4: Implementação da Estratégia EMA Crossover
+### [05/11/2026] - Fase 3 / Conclusão Completa (Tasks 3.1 a 3.6): Camada de Estratégias e EMA Crossover
 * Implementada `EMACrossoverStrategy` com validação $fast \ge 2, slow > fast$, `min_periods=slow_period` e sinais binários $\{0, 1\}$.
-* Cobertura de 100% em `src/strategies/ema_crossover.py` e 50 testes passando em toda a suíte.
+* Implementado `StrategyBacktestRunner` e `StrategyComparisonReport` com recorte mandatório de warm-up e relatório dual (Líquido B3 vs Bruto).
+* Execução e validação completa no universo B3 fixo (`ITUB4.SA`, `PETR4.SA`, `VALE3.SA`, `WEGE3.SA`) no período 2021-2024.
+* 58 testes passando (93% de cobertura global), 100% tipagem estrita no `mypy` e 0 erros no `ruff`.
 
 ---
 
 ## 4. Próximos Passos Imediatos
-1. Implementar Task 3.5: Backtest runner / testes de integração comparando os 4 ativos B3 (`ITUB4.SA`, `PETR4.SA`, `VALE3.SA`, `WEGE3.SA`) com e sem taxas B3 (0,03%) e recorte de warm-up *(AC03, AC04, AC05, AC13)*.
-2. Executar Task 3.6: Validação completa de qualidade (`ruff`, `mypy --strict`, `pytest`).
+1. Iniciar elaboração da Spec da Fase 4 (`specs/004-risk-management/spec.md`) cobrindo:
+   - Dimensionamento de posição (Fixed Fractional / Risco R$ 100).
+   - Stop-Loss e Trailing Stop.
+   - Disjuntor Operacional / Kill-Switch (Max Drawdown diário e semanal).
+2. Apresentar premissas e dúvidas ao usuário e aguardar aprovação explícita.

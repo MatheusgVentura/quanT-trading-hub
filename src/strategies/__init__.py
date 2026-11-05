@@ -7,11 +7,14 @@ from src.strategies.exceptions import (
     InvalidParameterError,
     StrategyError,
 )
+from src.strategies.runner import StrategyBacktestRunner, StrategyComparisonReport
 
 __all__ = [
     "BaseStrategy",
     "EMACrossoverStrategy",
     "InsufficientDataError",
     "InvalidParameterError",
+    "StrategyBacktestRunner",
+    "StrategyComparisonReport",
     "StrategyError",
 ]

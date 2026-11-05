@@ -1,6 +1,6 @@
 # Specification: Strategy Layer and EMA Crossover (`003-strategy-layer`)
 
-**Status:** draft  
+**Status:** approved (completed)  
 **Date:** 2026-11-05  
 **Domain Area:** `src/strategies/`  
 
