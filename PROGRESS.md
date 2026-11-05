@@ -5,9 +5,9 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 ---
 
 ## 1. Estado Atual
-* **Fase Atual:** ETAPA 4 — Especificação Técnica da Fase 3 elaborada (`specs/003-strategy-layer/`). Aguardando aprovação explícita.
+* **Fase Atual:** Fase 3 — Camada de Estratégias (`specs/003-strategy-layer/`). Task 3.1 concluída.
 * **Branch Ativo:** `main`
-* **Status Geral da Cobertura de Testes:** 28 testes passando (90% de cobertura global).
+* **Status Geral da Cobertura de Testes:** 31 testes passando (90% de cobertura global).
 * **Bloqueios:** Nenhum.
 
 ---
@@ -19,7 +19,7 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 | **000** | Setup de Governança, Regras e Stack Base | ✅ Concluído |
 | **001** | Infraestrutura e Padronização de Dados de Mercado (`src/data/`) | ✅ Concluído (`specs/001-data-infrastructure/`) |
 | **002** | Motor de Backtesting Vetorizado e Métricas (`src/backtest/`) | ✅ Concluído (`specs/002-vectorized-backtest/`) |
-| **003** | Camada Base de Estratégias e Estratégia EMA (`src/strategies/`) | 🟡 Spec em Revisão (`specs/003-strategy-layer/`) |
+| **003** | Camada Base de Estratégias e Estratégia EMA (`src/strategies/`) | 🔄 Em Implementação (Task 3.1 concluída) |
 | **004** | Gestão de Risco e Disjuntor Operacional (`src/risk/`) | ⏳ Pendente |
 | **005** | Execução e Sandbox / Paper Trading (`src/execution/`) | ⏳ Pendente |
 | **006** | Dashboard Web Interativo (Streamlit / Plotly) | ⏳ Pendente |
@@ -43,9 +43,13 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 * `ruff check .` e `ruff format --check .`: 100% aprovado (0 avisos).
 * `pytest --cov=src -v`: 28 testes passando com 90% de cobertura.
 
+### [05/11/2026] - Fase 3 / Task 3.1: Exceções de Estratégia
+* Implementada hierarquia `StrategyError`, `InvalidParameterError`, `InsufficientDataError`.
+* Testes derivados de AC08, AC09, AC12 passando com 100% de sucesso. Cobertura: 90%.
+
 ---
 
 ## 4. Próximos Passos Imediatos
-1. Apresentar os resultados da ETAPA 3 e obter alinhamento do usuário.
-2. Executar ETAPA 4: Elaborar a Especificação Técnica formal da Fase 3 (`specs/003-strategy-layer/spec.md`, `plan.md`, `tasks.md`) sem escrever código funcional.
-3. Aguardar aprovação explícita ("aprovado") da spec 003 antes de qualquer implementação.
+1. Implementar Task 3.2: Contrato abstrato `BaseStrategy` em `src/strategies/base.py` *(AC06, AC07)*.
+2. Implementar Task 3.3: `EMACrossoverStrategy` em `src/strategies/ema_crossover.py` *(AC01, AC02, AC08-AC12)*.
+3. Implementar testes unitários completos em `tests/unit/test_strategies/test_ema_crossover.py`.
