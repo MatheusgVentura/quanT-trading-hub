@@ -5,7 +5,7 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 ---
 
 ## 1. Estado Atual
-* **Fase Atual:** ETAPA 3 Concluída — Baseline 100% verde (`pytest`, `mypy --strict`, `ruff`). Aguardando aprovação para ETAPA 4 (Spec da Fase 3).
+* **Fase Atual:** ETAPA 4 — Especificação Técnica da Fase 3 elaborada (`specs/003-strategy-layer/`). Aguardando aprovação explícita.
 * **Branch Ativo:** `main`
 * **Status Geral da Cobertura de Testes:** 28 testes passando (90% de cobertura global).
 * **Bloqueios:** Nenhum.
@@ -17,9 +17,9 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 | Código | Funcionalidade | Status |
 | :--- | :--- | :--- |
 | **000** | Setup de Governança, Regras e Stack Base | ✅ Concluído |
-| **001** | Infraestrutura e Padronização de Dados de Mercado (`src/data/`) | ✅ Migrado (`specs/001-data-infrastructure/`) |
-| **002** | Motor de Backtesting Vetorizado e Métricas (`src/backtest/`) | ✅ Migrado (`specs/002-vectorized-backtest/`) |
-| **003** | Camada Base de Estratégias e Estratégia EMA (`src/strategies/`) | ⏳ Pendente (Aguardando Spec) |
+| **001** | Infraestrutura e Padronização de Dados de Mercado (`src/data/`) | ✅ Concluído (`specs/001-data-infrastructure/`) |
+| **002** | Motor de Backtesting Vetorizado e Métricas (`src/backtest/`) | ✅ Concluído (`specs/002-vectorized-backtest/`) |
+| **003** | Camada Base de Estratégias e Estratégia EMA (`src/strategies/`) | 🟡 Spec em Revisão (`specs/003-strategy-layer/`) |
 | **004** | Gestão de Risco e Disjuntor Operacional (`src/risk/`) | ⏳ Pendente |
 | **005** | Execução e Sandbox / Paper Trading (`src/execution/`) | ⏳ Pendente |
 | **006** | Dashboard Web Interativo (Streamlit / Plotly) | ⏳ Pendente |
