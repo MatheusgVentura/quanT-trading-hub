@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+
 from src.backtest.models import BacktestConfig, BacktestMetrics
 
 
@@ -52,7 +53,9 @@ class MetricsCalculator:
 
         # Benchmark Acumulado
         benchmark_cum = (1.0 + benchmark_returns).cumprod()
-        final_benchmark = float(benchmark_cum.iloc[-1]) if len(benchmark_cum) > 0 else 1.0
+        final_benchmark = (
+            float(benchmark_cum.iloc[-1]) if len(benchmark_cum) > 0 else 1.0
+        )
         benchmark_return_pct = (final_benchmark - 1.0) * 100.0
 
         # 2. CAGR (Compound Annual Growth Rate)
@@ -64,18 +67,26 @@ class MetricsCalculator:
             cagr_pct = 0.0
 
         # 3. Volatilidade Anualizada
-        daily_std = float(strategy_returns.std(ddof=1)) if len(strategy_returns) > 1 else 0.0
+        daily_std = (
+            float(strategy_returns.std(ddof=1)) if len(strategy_returns) > 1 else 0.0
+        )
         if np.isnan(daily_std):
             daily_std = 0.0
-        annualized_volatility_pct = daily_std * np.sqrt(config.trading_days_per_year) * 100.0
+        annualized_volatility_pct = (
+            daily_std * np.sqrt(config.trading_days_per_year) * 100.0
+        )
 
         # 4. Taxa livre de risco diária e Sharpe Ratio
-        rf_daily = (1.0 + config.risk_free_rate) ** (1.0 / config.trading_days_per_year) - 1.0
+        rf_daily = (1.0 + config.risk_free_rate) ** (
+            1.0 / config.trading_days_per_year
+        ) - 1.0
         excess_returns = strategy_returns - rf_daily
         excess_mean = float(excess_returns.mean())
 
         if daily_std > 1e-9:
-            sharpe_ratio = (excess_mean * np.sqrt(config.trading_days_per_year)) / daily_std
+            sharpe_ratio = (
+                excess_mean * np.sqrt(config.trading_days_per_year)
+            ) / daily_std
         else:
             sharpe_ratio = 0.0
 

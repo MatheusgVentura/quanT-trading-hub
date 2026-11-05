@@ -1,12 +1,12 @@
 """Testes unitários rigorosos para a calculadora de métricas quantitativas."""
 
-import numpy as np
 import pandas as pd
+
 from src.backtest.metrics import MetricsCalculator
 from src.backtest.models import BacktestConfig
 
 
-def test_metrics_empty_series():
+def test_metrics_empty_series() -> None:
     """Valida retorno seguro quando as séries forem vazias."""
     config = BacktestConfig()
     metrics = MetricsCalculator.calculate_metrics(
@@ -22,7 +22,7 @@ def test_metrics_empty_series():
     assert metrics.max_drawdown_pct == 0.0
 
 
-def test_metrics_drawdown_exactness():
+def test_metrics_drawdown_exactness() -> None:
     """Valida precisão do cálculo de Max Drawdown com queda conhecida de 20%."""
     # Curva: sobe para 100, sobe para 120 (pico), cai para 96 (queda de 20%), sobe para 110
     equity = pd.Series([1.0, 1.20, 0.96, 1.10])
@@ -41,7 +41,7 @@ def test_metrics_drawdown_exactness():
     assert metrics.max_drawdown_pct == -20.0
 
 
-def test_metrics_cagr_doubling():
+def test_metrics_cagr_doubling() -> None:
     """Valida CAGR após 252 dias úteis dobrando de valor (retorno 100%)."""
     days = 252
     config = BacktestConfig(trading_days_per_year=days)
@@ -62,7 +62,7 @@ def test_metrics_cagr_doubling():
     assert abs(metrics.cagr_pct - 100.0) < 1.0
 
 
-def test_metrics_win_rate_and_profit_factor():
+def test_metrics_win_rate_and_profit_factor() -> None:
     """Valida cálculo de Win Rate e Profit Factor."""
     # 3 ganhos de 10% e 1 perda de 10%
     returns = pd.Series([0.10, 0.10, -0.10, 0.10])

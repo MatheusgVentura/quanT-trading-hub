@@ -52,6 +52,7 @@ class BacktestConfig:
     risk_free_rate: float = 0.1075
     trading_days_per_year: int = 252
 
+
 @dataclass(frozen=True)
 class BacktestMetrics:
     total_return_pct: float
@@ -66,9 +67,12 @@ class BacktestMetrics:
     total_trades: int
     trading_days: int
 
+
 class VectorizedBacktestEngine:
     def __init__(self, config: BacktestConfig | None = None) -> None: ...
-    def run(self, ohlcv_df: pd.DataFrame, signals: pd.Series, ticker: str = "ATIVO") -> BacktestResult: ...
+    def run(
+        self, ohlcv_df: pd.DataFrame, signals: pd.Series, ticker: str = "ATIVO"
+    ) -> BacktestResult: ...
 ```
 
 ---

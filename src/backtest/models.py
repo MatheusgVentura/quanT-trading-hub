@@ -1,6 +1,7 @@
 """Modelos de dados e configurações para o motor de backtest."""
 
 from dataclasses import dataclass
+
 import pandas as pd
 
 
@@ -59,7 +60,7 @@ class BacktestResult:
             f"CAGR (Retorno Anualizado):  {m.cagr_pct:+.2f}% ao ano",
             "-" * 60,
             f"Volatilidade Anualizada:    {m.annualized_volatility_pct:.2f}%",
-            f"Sharpe Ratio (Rf={self.config.risk_free_rate*100:.1f}%):   {m.sharpe_ratio:.2f}",
+            f"Sharpe Ratio (Rf={self.config.risk_free_rate * 100:.1f}%):   {m.sharpe_ratio:.2f}",
             f"Sortino Ratio:              {m.sortino_ratio:.2f}",
             f"Max Drawdown (Pior Queda):  {m.max_drawdown_pct:.2f}%",
             "-" * 60,

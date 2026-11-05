@@ -1,14 +1,16 @@
 """Validação e sanitização de dados de mercado (OHLCV)."""
 
+from typing import ClassVar
+
 import pandas as pd
-import numpy as np
+
 from src.data.exceptions import DataValidationError
 
 
 class OHLCVValidator:
     """Validador de qualidade e integridade para séries temporais OHLCV."""
 
-    REQUIRED_COLUMNS = ["Open", "High", "Low", "Close", "Volume"]
+    REQUIRED_COLUMNS: ClassVar[list[str]] = ["Open", "High", "Low", "Close", "Volume"]
 
     @classmethod
     def validate_and_clean(cls, df: pd.DataFrame, ticker: str = "") -> pd.DataFrame:
@@ -25,7 +27,9 @@ class OHLCVValidator:
             DataValidationError: Se faltarem colunas ou se os dados violarem regras de integridade física.
         """
         if df is None or df.empty:
-            raise DataValidationError(f"DataFrame vazio ou nulo para o ativo '{ticker}'.")
+            raise DataValidationError(
+                f"DataFrame vazio ou nulo para o ativo '{ticker}'."
+            )
 
         cleaned = df.copy()
 
@@ -41,7 +45,9 @@ class OHLCVValidator:
         cleaned.columns = [str(col).strip().capitalize() for col in cleaned.columns]
 
         # 3. Verificação de colunas obrigatórias
-        missing_cols = [col for col in cls.REQUIRED_COLUMNS if col not in cleaned.columns]
+        missing_cols = [
+            col for col in cls.REQUIRED_COLUMNS if col not in cleaned.columns
+        ]
         if missing_cols:
             raise DataValidationError(
                 f"Colunas obrigatórias ausentes para '{ticker}': {missing_cols}. "
@@ -97,18 +103,24 @@ class OHLCVValidator:
             )
 
         # High deve ser a máxima do candle (>= Open e >= Close)
-        if (cleaned["High"] + epsilon < cleaned["Open"]).any() or (cleaned["High"] + epsilon < cleaned["Close"]).any():
+        if (cleaned["High"] + epsilon < cleaned["Open"]).any() or (
+            cleaned["High"] + epsilon < cleaned["Close"]
+        ).any():
             invalid_h = cleaned[
-                (cleaned["High"] + epsilon < cleaned["Open"]) | (cleaned["High"] + epsilon < cleaned["Close"])
+                (cleaned["High"] + epsilon < cleaned["Open"])
+                | (cleaned["High"] + epsilon < cleaned["Close"])
             ]
             raise DataValidationError(
                 f"Violação de integridade High menor que Open/Close em '{ticker}': {len(invalid_h)} linha(s)."
             )
 
         # Low deve ser a mínima do candle (<= Open e <= Close)
-        if (cleaned["Low"] - epsilon > cleaned["Open"]).any() or (cleaned["Low"] - epsilon > cleaned["Close"]).any():
+        if (cleaned["Low"] - epsilon > cleaned["Open"]).any() or (
+            cleaned["Low"] - epsilon > cleaned["Close"]
+        ).any():
             invalid_l = cleaned[
-                (cleaned["Low"] - epsilon > cleaned["Open"]) | (cleaned["Low"] - epsilon > cleaned["Close"])
+                (cleaned["Low"] - epsilon > cleaned["Open"])
+                | (cleaned["Low"] - epsilon > cleaned["Close"])
             ]
             raise DataValidationError(
                 f"Violação de integridade Low maior que Open/Close em '{ticker}': {len(invalid_l)} linha(s)."
@@ -122,4 +134,3 @@ class OHLCVValidator:
             )
 
         return cleaned
-

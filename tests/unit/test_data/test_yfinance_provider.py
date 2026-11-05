@@ -1,15 +1,18 @@
 """Testes unitários para o YFinanceDataProvider utilizando mocks."""
 
-from unittest.mock import patch, MagicMock
-import pytest
+from pathlib import Path
+from unittest.mock import MagicMock, patch
+
 import pandas as pd
-from src.data.yfinance_provider import YFinanceDataProvider
+import pytest
+
 from src.data.cache import DataCacheManager
-from src.data.exceptions import TickerNotFoundError, DataDownloadError
+from src.data.exceptions import DataDownloadError, TickerNotFoundError
+from src.data.yfinance_provider import YFinanceDataProvider
 
 
 @pytest.fixture
-def sample_raw_yf_df():
+def sample_raw_yf_df() -> pd.DataFrame:
     """Gera DataFrame no formato típico do yfinance."""
     dates = pd.date_range("2024-01-01", periods=3, freq="D")
     return pd.DataFrame(
@@ -25,7 +28,9 @@ def sample_raw_yf_df():
 
 
 @patch("yfinance.download")
-def test_fetch_ohlcv_success(mock_download, sample_raw_yf_df):
+def test_fetch_ohlcv_success(
+    mock_download: MagicMock, sample_raw_yf_df: pd.DataFrame
+) -> None:
     """Testa busca com sucesso de dados do yfinance."""
     mock_download.return_value = sample_raw_yf_df
     provider = YFinanceDataProvider()
@@ -39,7 +44,7 @@ def test_fetch_ohlcv_success(mock_download, sample_raw_yf_df):
 
 
 @patch("yfinance.download")
-def test_fetch_ohlcv_ticker_not_found(mock_download):
+def test_fetch_ohlcv_ticker_not_found(mock_download: MagicMock) -> None:
     """Testa erro quando ticker não retorna dados."""
     mock_download.return_value = pd.DataFrame()
     provider = YFinanceDataProvider()
@@ -49,7 +54,7 @@ def test_fetch_ohlcv_ticker_not_found(mock_download):
 
 
 @patch("yfinance.download")
-def test_fetch_ohlcv_network_failure(mock_download):
+def test_fetch_ohlcv_network_failure(mock_download: MagicMock) -> None:
     """Testa erro de rede empacotado em DataDownloadError."""
     mock_download.side_effect = ConnectionError("Timeout de conexão")
     provider = YFinanceDataProvider()
@@ -59,7 +64,9 @@ def test_fetch_ohlcv_network_failure(mock_download):
 
 
 @patch("yfinance.download")
-def test_fetch_ohlcv_cache_hit_avoids_api_call(mock_download, tmp_path, sample_raw_yf_df):
+def test_fetch_ohlcv_cache_hit_avoids_api_call(
+    mock_download: MagicMock, tmp_path: Path, sample_raw_yf_df: pd.DataFrame
+) -> None:
     """Testa se cache hit previne chamada externa."""
     cache = DataCacheManager(cache_dir=str(tmp_path))
     provider = YFinanceDataProvider(cache_manager=cache)
@@ -74,4 +81,3 @@ def test_fetch_ohlcv_cache_hit_avoids_api_call(mock_download, tmp_path, sample_r
     df2 = provider.fetch_ohlcv(ticker="WEGE3.SA", period="1y")
     assert mock_download.call_count == 1
     assert len(df1) == len(df2)
-

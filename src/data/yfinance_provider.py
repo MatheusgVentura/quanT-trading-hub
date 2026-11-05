@@ -1,6 +1,5 @@
 """Provedor concreto de dados de mercado utilizando a biblioteca yfinance."""
 
-from typing import Optional
 import pandas as pd
 import yfinance as yf
 
@@ -13,7 +12,7 @@ from src.data.validator import OHLCVValidator
 class YFinanceDataProvider(IDataProvider):
     """Provedor de dados de mercado baseado na API do Yahoo Finance."""
 
-    def __init__(self, cache_manager: Optional[DataCacheManager] = None):
+    def __init__(self, cache_manager: DataCacheManager | None = None):
         """Inicializa o provedor.
 
         Args:
@@ -24,9 +23,9 @@ class YFinanceDataProvider(IDataProvider):
     def fetch_ohlcv(
         self,
         ticker: str,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
-        period: Optional[str] = "1y",
+        start_date: str | None = None,
+        end_date: str | None = None,
+        period: str | None = "1y",
         interval: str = "1d",
     ) -> pd.DataFrame:
         """Recupera dados OHLCV históricos sanitizados e validados.
@@ -78,7 +77,9 @@ class YFinanceDataProvider(IDataProvider):
                     auto_adjust=False,
                 )
         except Exception as exc:
-            raise DataDownloadError(f"Falha de rede ao baixar dados para '{ticker}': {exc}") from exc
+            raise DataDownloadError(
+                f"Falha de rede ao baixar dados para '{ticker}': {exc}"
+            ) from exc
 
         if raw_df is None or raw_df.empty:
             raise TickerNotFoundError(
@@ -92,4 +93,3 @@ class YFinanceDataProvider(IDataProvider):
             self.cache_manager.set(cache_key, validated_df)
 
         return validated_df
-

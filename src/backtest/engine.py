@@ -1,7 +1,5 @@
 """Motor de simulação de backtesting vetorizado."""
 
-from typing import Optional
-import numpy as np
 import pandas as pd
 
 from src.backtest.exceptions import (
@@ -16,7 +14,7 @@ from src.backtest.models import BacktestConfig, BacktestResult
 class VectorizedBacktestEngine:
     """Motor de execução de backtests vetorizados com custos B3 e proteção contra vieses."""
 
-    def __init__(self, config: Optional[BacktestConfig] = None):
+    def __init__(self, config: BacktestConfig | None = None):
         """Inicializa o motor com configurações de fricção e parâmetros de mercado.
 
         Args:
@@ -52,7 +50,9 @@ class VectorizedBacktestEngine:
             raise BacktestError(f"Série de sinais vazia ou nula para '{ticker}'.")
 
         if "Close" not in ohlcv_df.columns:
-            raise BacktestError(f"Coluna 'Close' obrigatória ausente no DataFrame OHLCV de '{ticker}'.")
+            raise BacktestError(
+                f"Coluna 'Close' obrigatória ausente no DataFrame OHLCV de '{ticker}'."
+            )
 
         # 1. Validação de alinhamento temporal
         if not ohlcv_df.index.equals(signals.index):
@@ -64,7 +64,9 @@ class VectorizedBacktestEngine:
         # 2. Validação de domínio dos sinais
         clean_signals = signals.astype(float).fillna(0.0)
         if (clean_signals < -1.0).any() or (clean_signals > 1.0).any():
-            invalid_vals = clean_signals[(clean_signals < -1.0) | (clean_signals > 1.0)].unique()
+            invalid_vals = clean_signals[
+                (clean_signals < -1.0) | (clean_signals > 1.0)
+            ].unique()
             raise InvalidSignalError(
                 f"Valores de sinal inválidos detectados para '{ticker}': {invalid_vals}. "
                 f"Os sinais devem estar no intervalo [-1.0, 1.0]."

@@ -10,12 +10,12 @@ from src.backtest.metrics import MetricsCalculator
 from src.backtest.models import BacktestConfig, BacktestMetrics, BacktestResult
 
 __all__ = [
-    "VectorizedBacktestEngine",
     "BacktestConfig",
+    "BacktestError",
     "BacktestMetrics",
     "BacktestResult",
-    "MetricsCalculator",
-    "BacktestError",
     "InvalidSignalError",
+    "MetricsCalculator",
     "MismatchedIndexError",
+    "VectorizedBacktestEngine",
 ]

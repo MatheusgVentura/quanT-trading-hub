@@ -1,15 +1,15 @@
 """Gerenciador de cache local para séries temporais financeiras."""
 
-from pathlib import Path
-from typing import Optional
 import datetime
+from pathlib import Path
+
 import pandas as pd
 
 
 class DataCacheManager:
     """Gerencia armazenamento e recuperação em cache local de dados OHLCV."""
 
-    def __init__(self, cache_dir: str = ".cache/data", ttl_hours: Optional[int] = 24):
+    def __init__(self, cache_dir: str = ".cache/data", ttl_hours: int | None = 24):
         """Inicializa o gerenciador de cache.
 
         Args:
@@ -23,9 +23,9 @@ class DataCacheManager:
     def generate_key(
         self,
         ticker: str,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
-        period: Optional[str] = "1y",
+        start_date: str | None = None,
+        end_date: str | None = None,
+        period: str | None = "1y",
         interval: str = "1d",
     ) -> str:
         """Gera uma chave determinística para o arquivo de cache."""
@@ -35,7 +35,7 @@ class DataCacheManager:
         p = period or "none"
         return f"{clean_ticker}_{p}_{s_date}_{e_date}_{interval}.parquet"
 
-    def get(self, key: str) -> Optional[pd.DataFrame]:
+    def get(self, key: str) -> pd.DataFrame | None:
         """Recupera um DataFrame do cache caso exista e não esteja expirado."""
         file_path = self.cache_dir / key
         if not file_path.exists():
@@ -49,9 +49,8 @@ class DataCacheManager:
                 return None
 
         try:
-            df = pd.read_parquet(file_path)
-            return df
-        except Exception:
+            return pd.read_parquet(file_path)
+        except (OSError, ValueError):
             return None
 
     def set(self, key: str, df: pd.DataFrame) -> None:
@@ -59,9 +58,9 @@ class DataCacheManager:
         file_path = self.cache_dir / key
         try:
             df.to_parquet(file_path, engine="pyarrow")
-        except Exception:
-            # Fallback transparente para não travar a aplicação caso haja erro de I/O
-            pass
+        except (OSError, ValueError):
+            # Fallback silencioso para não travar a aplicação caso haja erro de I/O
+            return
 
     def clear(self) -> None:
         """Remove todos os arquivos do diretório de cache."""
@@ -70,4 +69,3 @@ class DataCacheManager:
                 item.unlink()
             except OSError:
                 pass
-

@@ -1,20 +1,19 @@
 """Testes unitários para a engine de backtest vetorizada."""
 
-import pytest
 import pandas as pd
-import numpy as np
+import pytest
 
 from src.backtest.engine import VectorizedBacktestEngine
-from src.backtest.models import BacktestConfig
 from src.backtest.exceptions import (
     BacktestError,
-    MismatchedIndexError,
     InvalidSignalError,
+    MismatchedIndexError,
 )
+from src.backtest.models import BacktestConfig
 
 
 @pytest.fixture
-def sample_ohlcv_series():
+def sample_ohlcv_series() -> pd.DataFrame:
     """Gera série de preços previsível para validação de fórmulas."""
     dates = pd.date_range("2024-01-01", periods=5, freq="D")
     df = pd.DataFrame(
@@ -30,7 +29,7 @@ def sample_ohlcv_series():
     return df
 
 
-def test_look_ahead_bias_protection(sample_ohlcv_series):
+def test_look_ahead_bias_protection(sample_ohlcv_series: pd.DataFrame) -> None:
     """Testa se o sinal emitido em t só pontua retorno em t+1 (shift 1)."""
     dates = sample_ohlcv_series.index
     # Sinal de compra emitido no dia 0 (Close 10.0)
@@ -57,7 +56,9 @@ def test_look_ahead_bias_protection(sample_ohlcv_series):
     assert eq.loc[dates[2], "Retorno_Estrategia"] == 0.0
 
 
-def test_b3_costs_deducted_strictly_on_position_changes(sample_ohlcv_series):
+def test_b3_costs_deducted_strictly_on_position_changes(
+    sample_ohlcv_series: pd.DataFrame,
+) -> None:
     """Valida se as taxas da B3 são debitadas somente quando há transição de posição."""
     dates = sample_ohlcv_series.index
     # Dia 0: Sinal 1 -> Gera transição em t+1 (0 -> 1)
@@ -66,7 +67,9 @@ def test_b3_costs_deducted_strictly_on_position_changes(sample_ohlcv_series):
     signals = pd.Series([1, 1, 0, 0, 0], index=dates)
 
     fee = 0.0003  # 0.03%
-    engine = VectorizedBacktestEngine(config=BacktestConfig(b3_fee_pct=fee, brokerage_fee=0.0))
+    engine = VectorizedBacktestEngine(
+        config=BacktestConfig(b3_fee_pct=fee, brokerage_fee=0.0)
+    )
     result = engine.run(sample_ohlcv_series, signals, ticker="TEST4.SA")
 
     eq = result.equity_curve
@@ -80,7 +83,7 @@ def test_b3_costs_deducted_strictly_on_position_changes(sample_ohlcv_series):
     assert result.metrics.total_trades == 2
 
 
-def test_all_cash_strategy(sample_ohlcv_series):
+def test_all_cash_strategy(sample_ohlcv_series: pd.DataFrame) -> None:
     """Valida que sinal sempre neutro (0) resulta em retorno zero e zero trades."""
     dates = sample_ohlcv_series.index
     signals = pd.Series([0, 0, 0, 0, 0], index=dates)
@@ -93,7 +96,7 @@ def test_all_cash_strategy(sample_ohlcv_series):
     assert result.metrics.max_drawdown_pct == 0.0
 
 
-def test_mismatched_index_raises_error(sample_ohlcv_series):
+def test_mismatched_index_raises_error(sample_ohlcv_series: pd.DataFrame) -> None:
     """Valida que índices temporais incompatíveis levantam MismatchedIndexError."""
     other_dates = pd.date_range("2025-01-01", periods=5, freq="D")
     signals = pd.Series([1, 1, 1, 1, 1], index=other_dates)
@@ -103,7 +106,9 @@ def test_mismatched_index_raises_error(sample_ohlcv_series):
         engine.run(sample_ohlcv_series, signals, ticker="TEST4.SA")
 
 
-def test_invalid_signal_values_raises_error(sample_ohlcv_series):
+def test_invalid_signal_values_raises_error(
+    sample_ohlcv_series: pd.DataFrame,
+) -> None:
     """Valida que valores de sinais fora de [-1, 1] levantam InvalidSignalError."""
     dates = sample_ohlcv_series.index
     signals = pd.Series([1, 2.5, 0, 0, 0], index=dates)  # 2.5 é inválido
@@ -113,7 +118,7 @@ def test_invalid_signal_values_raises_error(sample_ohlcv_series):
         engine.run(sample_ohlcv_series, signals, ticker="TEST4.SA")
 
 
-def test_empty_ohlcv_raises_backtest_error():
+def test_empty_ohlcv_raises_backtest_error() -> None:
     """Valida que DataFrame vazio levanta BacktestError."""
     engine = VectorizedBacktestEngine()
     with pytest.raises(BacktestError, match="DataFrame OHLCV vazio"):

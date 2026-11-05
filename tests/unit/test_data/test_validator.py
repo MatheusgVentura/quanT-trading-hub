@@ -1,14 +1,14 @@
 """Testes unitários para o OHLCVValidator."""
 
-import pytest
 import pandas as pd
-import numpy as np
-from src.data.validator import OHLCVValidator
+import pytest
+
 from src.data.exceptions import DataValidationError
+from src.data.validator import OHLCVValidator
 
 
 @pytest.fixture
-def sample_valid_ohlcv_df():
+def sample_valid_ohlcv_df() -> pd.DataFrame:
     """Gera um DataFrame OHLCV sintético válido para testes."""
     dates = pd.date_range("2024-01-01", periods=5, freq="D")
     data = {
@@ -21,7 +21,7 @@ def sample_valid_ohlcv_df():
     return pd.DataFrame(data, index=dates)
 
 
-def test_validator_success(sample_valid_ohlcv_df):
+def test_validator_success(sample_valid_ohlcv_df: pd.DataFrame) -> None:
     """Testa validação e sanitização bem-sucedida."""
     result = OHLCVValidator.validate_and_clean(sample_valid_ohlcv_df, ticker="TEST4.SA")
     assert list(result.columns) == ["Open", "High", "Low", "Close", "Volume"]
@@ -29,7 +29,7 @@ def test_validator_success(sample_valid_ohlcv_df):
     assert isinstance(result.index, pd.DatetimeIndex)
 
 
-def test_validator_multiindex_flattening(sample_valid_ohlcv_df):
+def test_validator_multiindex_flattening(sample_valid_ohlcv_df: pd.DataFrame) -> None:
     """Testa suporte a MultiIndex retornado pelo yfinance."""
     # Simula colunas MultiIndex: [('Open', 'ITUB4.SA'), ...]
     multi_cols = pd.MultiIndex.from_tuples(
@@ -44,20 +44,20 @@ def test_validator_multiindex_flattening(sample_valid_ohlcv_df):
     assert not isinstance(result.columns, pd.MultiIndex)
 
 
-def test_validator_empty_df_raises():
+def test_validator_empty_df_raises() -> None:
     """Testa se DataFrame vazio levanta DataValidationError."""
     with pytest.raises(DataValidationError, match="vazio ou nulo"):
         OHLCVValidator.validate_and_clean(pd.DataFrame(), ticker="EMPTY")
 
 
-def test_validator_missing_column(sample_valid_ohlcv_df):
+def test_validator_missing_column(sample_valid_ohlcv_df: pd.DataFrame) -> None:
     """Testa se ausência de coluna obrigatória levanta DataValidationError."""
     df_missing = sample_valid_ohlcv_df.drop(columns=["Volume"])
     with pytest.raises(DataValidationError, match="Colunas obrigatórias ausentes"):
         OHLCVValidator.validate_and_clean(df_missing, ticker="TEST4.SA")
 
 
-def test_validator_high_lower_than_low(sample_valid_ohlcv_df):
+def test_validator_high_lower_than_low(sample_valid_ohlcv_df: pd.DataFrame) -> None:
     """Testa detecção de anomalia física High < Low."""
     corrupted = sample_valid_ohlcv_df.copy()
     corrupted.iloc[0, corrupted.columns.get_loc("High")] = 8.0  # Menor que Low (9.8)
@@ -65,7 +65,7 @@ def test_validator_high_lower_than_low(sample_valid_ohlcv_df):
         OHLCVValidator.validate_and_clean(corrupted, ticker="TEST4.SA")
 
 
-def test_validator_negative_or_zero_price(sample_valid_ohlcv_df):
+def test_validator_negative_or_zero_price(sample_valid_ohlcv_df: pd.DataFrame) -> None:
     """Testa detecção de preços menores ou iguais a zero."""
     corrupted = sample_valid_ohlcv_df.copy()
     corrupted.iloc[0, corrupted.columns.get_loc("Close")] = 0.0
@@ -73,7 +73,7 @@ def test_validator_negative_or_zero_price(sample_valid_ohlcv_df):
         OHLCVValidator.validate_and_clean(corrupted, ticker="TEST4.SA")
 
 
-def test_validator_negative_volume(sample_valid_ohlcv_df):
+def test_validator_negative_volume(sample_valid_ohlcv_df: pd.DataFrame) -> None:
     """Testa detecção de volume negativo."""
     corrupted = sample_valid_ohlcv_df.copy()
     corrupted.iloc[0, corrupted.columns.get_loc("Volume")] = -100
@@ -81,11 +81,12 @@ def test_validator_negative_volume(sample_valid_ohlcv_df):
         OHLCVValidator.validate_and_clean(corrupted, ticker="TEST4.SA")
 
 
-def test_validator_high_lower_than_close(sample_valid_ohlcv_df):
+def test_validator_high_lower_than_close(sample_valid_ohlcv_df: pd.DataFrame) -> None:
     """Testa se High menor que Close levanta DataValidationError."""
     corrupted = sample_valid_ohlcv_df.copy()
     corrupted.iloc[0, corrupted.columns.get_loc("Close")] = 11.5
     corrupted.iloc[0, corrupted.columns.get_loc("High")] = 10.8
-    with pytest.raises(DataValidationError, match="Violação de integridade High menor que Open/Close"):
+    with pytest.raises(
+        DataValidationError, match="Violação de integridade High menor que Open/Close"
+    ):
         OHLCVValidator.validate_and_clean(corrupted, ticker="TEST4.SA")
-

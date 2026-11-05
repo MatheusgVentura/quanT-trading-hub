@@ -1,7 +1,7 @@
 """Interfaces e contratos para provedores de dados de mercado."""
 
 from abc import ABC, abstractmethod
-from typing import Optional
+
 import pandas as pd
 
 
@@ -12,9 +12,9 @@ class IDataProvider(ABC):
     def fetch_ohlcv(
         self,
         ticker: str,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
-        period: Optional[str] = "1y",
+        start_date: str | None = None,
+        end_date: str | None = None,
+        period: str | None = "1y",
         interval: str = "1d",
     ) -> pd.DataFrame:
         """Recupera série temporal OHLCV padronizada e validada.
@@ -35,5 +35,3 @@ class IDataProvider(ABC):
             DataValidationError: Se os dados violarem regras de integridade.
             DataDownloadError: Se houver falha de rede/serviço.
         """
-        pass
-

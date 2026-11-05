@@ -1,10 +1,11 @@
 """Testes unitários para BacktestConfig, BacktestMetrics e BacktestResult."""
 
 import pandas as pd
+
 from src.backtest.models import BacktestConfig, BacktestMetrics, BacktestResult
 
 
-def test_backtest_config_defaults():
+def test_backtest_config_defaults() -> None:
     """Valida valores padrão da configuração alinhados com custos B3 e XP."""
     config = BacktestConfig()
     assert config.initial_capital == 100.0
@@ -13,7 +14,7 @@ def test_backtest_config_defaults():
     assert config.trading_days_per_year == 252
 
 
-def test_backtest_result_summary():
+def test_backtest_result_summary() -> None:
     """Valida se o método summary() gera relatório textual legível."""
     config = BacktestConfig(initial_capital=100.0)
     metrics = BacktestMetrics(

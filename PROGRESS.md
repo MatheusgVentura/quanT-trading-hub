@@ -5,10 +5,10 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 ---
 
 ## 1. Estado Atual
-* **Fase Atual:** ETAPA 2 — Migração Retroativa para o Padrão SDD Formal.
-* **Branch Ativo:** `chore/sdd-migration`
+* **Fase Atual:** ETAPA 3 Concluída — Baseline 100% verde (`pytest`, `mypy --strict`, `ruff`). Aguardando aprovação para ETAPA 4 (Spec da Fase 3).
+* **Branch Ativo:** `main`
 * **Status Geral da Cobertura de Testes:** 28 testes passando (90% de cobertura global).
-* **Bloqueios:** Nenhum no momento.
+* **Bloqueios:** Nenhum.
 
 ---
 
@@ -17,8 +17,8 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 | Código | Funcionalidade | Status |
 | :--- | :--- | :--- |
 | **000** | Setup de Governança, Regras e Stack Base | ✅ Concluído |
-| **001** | Infraestrutura e Padronização de Dados de Mercado (`src/data/`) | 🔄 Migração para `specs/001-data-infrastructure/` |
-| **002** | Motor de Backtesting Vetorizado e Métricas (`src/backtest/`) | 🔄 Migração para `specs/002-vectorized-backtest/` |
+| **001** | Infraestrutura e Padronização de Dados de Mercado (`src/data/`) | ✅ Migrado (`specs/001-data-infrastructure/`) |
+| **002** | Motor de Backtesting Vetorizado e Métricas (`src/backtest/`) | ✅ Migrado (`specs/002-vectorized-backtest/`) |
 | **003** | Camada Base de Estratégias e Estratégia EMA (`src/strategies/`) | ⏳ Pendente (Aguardando Spec) |
 | **004** | Gestão de Risco e Disjuntor Operacional (`src/risk/`) | ⏳ Pendente |
 | **005** | Execução e Sandbox / Paper Trading (`src/execution/`) | ⏳ Pendente |
@@ -31,21 +31,21 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 ### [05/11/2026] - Setup e Baseline Inicial
 * Implementado módulo de ingestão `src/data/` com cache Parquet e validação física OHLCV.
 * Implementada engine `src/backtest/` com métricas quantitativas institucionais e proteção contra *look-ahead bias*.
-* **Baseline medido na auditoria:**
-  * `pytest`: 28 testes passando (100%).
-  * `mypy --strict`: 31 erros de anotação de retorno em arquivos de teste.
-  * `ruff check`: 47 avisos de import/formatação.
 
-### [05/11/2026] - Adoção da Nova Governança SDD
+### [05/11/2026] - Adoção da Nova Governança SDD e Reestruturação
 * Divisão estrita de papéis: `AGENTS.md` (somente regras estáveis) e `PROGRESS.md` (progresso e estado volátil).
 * `CLAUDE.md` reduzido a `@AGENTS.md` para suportar uso eventual do Claude Code.
-* Migração das especificações monolíticas para a estrutura de tríade em inglês: `specs/<NNN-nome>/spec.md`, `plan.md`, `tasks.md`.
+* Migração formal para tríades em inglês: `specs/001-data-infrastructure/` e `specs/002-vectorized-backtest/`.
+* Remoção dos arquivos monolíticos obsoletos (`specs/01_...` e `specs/02_...`).
+
+### [05/11/2026] - Conclusão da ETAPA 3: Qualidade Estrita
+* `mypy --strict src tests`: 100% tipado (0 erros em 21 arquivos).
+* `ruff check .` e `ruff format --check .`: 100% aprovado (0 avisos).
+* `pytest --cov=src -v`: 28 testes passando com 90% de cobertura.
 
 ---
 
 ## 4. Próximos Passos Imediatos
-1. Finalizar criação das specs retroativas `001-data-infrastructure` e `002-vectorized-backtest`.
-2. Reportar divergências encontradas entre specs originais e código implementado.
-3. Obter aprovação do usuário para concluir a ETAPA 2.
-4. Executar ETAPA 3: ajustar tipagem estrita nos testes (`mypy --strict`) e formatação (`ruff check --fix` e manual).
-5. Executar ETAPA 4: elaborar a especificação formal `specs/003-strategy-layer/`.
+1. Apresentar os resultados da ETAPA 3 e obter alinhamento do usuário.
+2. Executar ETAPA 4: Elaborar a Especificação Técnica formal da Fase 3 (`specs/003-strategy-layer/spec.md`, `plan.md`, `tasks.md`) sem escrever código funcional.
+3. Aguardar aprovação explícita ("aprovado") da spec 003 antes de qualquer implementação.
