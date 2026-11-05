@@ -1,5 +1,6 @@
 """Strategy layer package."""
 
+from src.strategies.base import BaseStrategy
 from src.strategies.exceptions import (
     InsufficientDataError,
     InvalidParameterError,
@@ -7,6 +8,7 @@ from src.strategies.exceptions import (
 )
 
 __all__ = [
+    "BaseStrategy",
     "InsufficientDataError",
     "InvalidParameterError",
     "StrategyError",

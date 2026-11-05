@@ -5,9 +5,9 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 ---
 
 ## 1. Estado Atual
-* **Fase Atual:** Fase 3 — Camada de Estratégias (`specs/003-strategy-layer/`). Task 3.1 concluída.
+* **Fase Atual:** Fase 3 — Camada de Estratégias (`specs/003-strategy-layer/`). Task 3.2 concluída.
 * **Branch Ativo:** `main`
-* **Status Geral da Cobertura de Testes:** 31 testes passando (90% de cobertura global).
+* **Status Geral da Cobertura de Testes:** 34 testes passando (91% de cobertura global).
 * **Bloqueios:** Nenhum.
 
 ---
@@ -19,7 +19,7 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 | **000** | Setup de Governança, Regras e Stack Base | ✅ Concluído |
 | **001** | Infraestrutura e Padronização de Dados de Mercado (`src/data/`) | ✅ Concluído (`specs/001-data-infrastructure/`) |
 | **002** | Motor de Backtesting Vetorizado e Métricas (`src/backtest/`) | ✅ Concluído (`specs/002-vectorized-backtest/`) |
-| **003** | Camada Base de Estratégias e Estratégia EMA (`src/strategies/`) | 🔄 Em Implementação (Task 3.1 concluída) |
+| **003** | Camada Base de Estratégias e Estratégia EMA (`src/strategies/`) | 🔄 Em Implementação (Tasks 3.1 e 3.2 concluídas) |
 | **004** | Gestão de Risco e Disjuntor Operacional (`src/risk/`) | ⏳ Pendente |
 | **005** | Execução e Sandbox / Paper Trading (`src/execution/`) | ⏳ Pendente |
 | **006** | Dashboard Web Interativo (Streamlit / Plotly) | ⏳ Pendente |
@@ -43,13 +43,13 @@ Documento dinâmico de sincronização com o estado atual, entregas recentes, bl
 * `ruff check .` e `ruff format --check .`: 100% aprovado (0 avisos).
 * `pytest --cov=src -v`: 28 testes passando com 90% de cobertura.
 
-### [05/11/2026] - Fase 3 / Task 3.1: Exceções de Estratégia
+### [05/11/2026] - Fase 3 / Tasks 3.1 e 3.2: Camada de Estratégias
 * Implementada hierarquia `StrategyError`, `InvalidParameterError`, `InsufficientDataError`.
-* Testes derivados de AC08, AC09, AC12 passando com 100% de sucesso. Cobertura: 90%.
+* Implementado contrato base abstrato `BaseStrategy` e testes derivados de AC06, AC07, AC08, AC09, AC12. Cobertura: 91%.
 
 ---
 
 ## 4. Próximos Passos Imediatos
-1. Implementar Task 3.2: Contrato abstrato `BaseStrategy` em `src/strategies/base.py` *(AC06, AC07)*.
-2. Implementar Task 3.3: `EMACrossoverStrategy` em `src/strategies/ema_crossover.py` *(AC01, AC02, AC08-AC12)*.
-3. Implementar testes unitários completos em `tests/unit/test_strategies/test_ema_crossover.py`.
+1. Implementar Task 3.3: `EMACrossoverStrategy` em `src/strategies/ema_crossover.py` *(AC01, AC02, AC08-AC12)*.
+2. Implementar testes unitários para a estratégia em `tests/unit/test_strategies/test_ema_crossover.py`.
+3. Implementar Task 3.5: Validação da estratégia com os 4 ativos B3 e recorte de warm-up.
