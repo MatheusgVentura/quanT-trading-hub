@@ -67,6 +67,15 @@ black src tests
 flake8 src tests
 ```
 
+### 3.4 Padrão de Commits (Conventional Commits)
+* Commits atômicos a cada entrega concluída seguindo o padrão:
+  * `feat(escopo)`: Nova funcionalidade.
+  * `test(escopo)`: Adição ou ajuste de testes.
+  * `chore(escopo)`: Configurações, dependências, governança.
+  * `docs(escopo)`: Atualização de especificações ou documentação.
+  * `fix(escopo)`: Correção de bugs.
+* **Segurança:** O arquivo `.env` nunca deve ser versionado (protegido no `.gitignore`). Usar `.env.example` como gabarito.
+
 ---
 
 ## 4. Padrões de Código e Arquitetura
