@@ -4,6 +4,23 @@ Documento de referência permanente contendo regras estáveis, convenções de a
 
 ---
 
+## Contexto do projeto (carregado automaticamente)
+@PROGRESS.md
+
+## Início de sessão
+- Se o conteúdo de PROGRESS.md acima não estiver no seu contexto, leia o
+  arquivo agora.
+- Leia também o tasks.md da funcionalidade em andamento.
+- Antes de qualquer ação, me diga em 2 linhas onde paramos.
+- Leia o PROJETO.md apenas quando a tarefa envolver regra de negócio.
+
+## Manutenção do PROGRESS.md
+- Atualize ao concluir cada tarefa do tasks.md, editando só o necessário.
+- Mantenha dentro do limite de ~60 linhas; ao passar, resuma as entregas antigas.
+- O AGENTS.md nunca recebe status; o PROGRESS.md nunca recebe regras.
+
+---
+
 ## 1. Fluxo de Desenvolvimento de Funcionalidades (Spec-Driven Development)
 
 1. **Spec Obrigatória:** Toda funcionalidade inicia em `specs/<NNN-nome>/spec.md` contendo:
