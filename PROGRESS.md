@@ -6,15 +6,15 @@ Documento dinâmico contendo o estado atual, decisões ativas e próximos passos
 
 ## Estado atual
 * **Fases concluídas:** 000 (Setup/SDD), 001 (Data), 002 (Backtest), 003 (Strategy EMA).
-* **Fase ativa:** 004 — Gestão de Risco e Disjuntor (`specs/004-risk-management/`), Tasks 4.1 e 4.2 concluídas.
-* **Branch:** `main` | **Qualidade:** 95 testes passando (94% de cobertura), mypy strict e ruff 100%.
+* **Fase ativa:** 004 — Gestão de Risco e Disjuntor (`specs/004-risk-management/`), Tasks 4.1 a 4.3 concluídas.
+* **Branch:** `main` | **Qualidade:** 118 testes passando (95% de cobertura), mypy strict e ruff 100%.
 
 ## Em andamento
-* Implementação da Fase 4 (`src/risk/`). Próxima tarefa: Task 4.3 (`sizing.py`).
+* Implementação da Fase 4 (`src/risk/`). Próxima tarefa: Task 4.4 (`stops.py`).
 
 ## Próximos passos
-1. Executar Task 4.3: implementar `PositionSizer` em `src/risk/sizing.py` com lote fracionário B3, taxa de 0,03%, guarda de caixa e risco estrito de 2% + testes.
-2. Seguir sequencialmente Tasks 4.4 a 4.8 de `specs/004-risk-management/tasks.md`.
+1. Executar Task 4.4: implementar `StopMonitor` em `src/risk/stops.py` (Stop-Loss fixo 5% e Trailing Stop 5% com high-water mark) + testes.
+2. Seguir sequencialmente Tasks 4.5 a 4.8 de `specs/004-risk-management/tasks.md`.
 
 ## Decisões ativas
 * **Metodologia:** SDD estrito (tríade `spec.md`, `plan.md`, `tasks.md` antes de qualquer código).
@@ -26,8 +26,8 @@ Documento dinâmico contendo o estado atual, decisões ativas e próximos passos
 * Nenhum bloqueio ativo.
 
 ## Entregas concluídas (últimas 5)
-1. **Fase 1 (Data):** Ingestão `src/data/`, cache Parquet e validação OHLCV (`specs/001-data-infrastructure/`).
-2. **Fase 2 (Backtest):** Engine vetorizada `src/backtest/` com métricas financeiras (`specs/002-vectorized-backtest/`).
-3. **Fase 3 (Strategies):** `BaseStrategy`, `EMACrossoverStrategy` 9/21 e `StrategyBacktestRunner` nos 4 ativos B3 (`specs/003-strategy-layer/`).
-4. **Fase 4 / Task 4.1 (Risk Exceptions):** Hierarquia tipada em `src/risk/exceptions.py` + 4 testes unitários.
-5. **Fase 4 / Task 4.2 (Risk Models):** `RiskStatus`, `HaltReason`, `RiskConfig`, `PositionSizeResult`, `KillSwitchState` e `RiskVerdict` + 33 testes unitários.
+1. **Fase 2 (Backtest):** Engine vetorizada `src/backtest/` com métricas financeiras (`specs/002-vectorized-backtest/`).
+2. **Fase 3 (Strategies):** `BaseStrategy`, `EMACrossoverStrategy` 9/21 e `StrategyBacktestRunner` nos 4 ativos B3 (`specs/003-strategy-layer/`).
+3. **Fase 4 / Task 4.1 (Risk Exceptions):** Hierarquia tipada em `src/risk/exceptions.py` + 4 testes unitários.
+4. **Fase 4 / Task 4.2 (Risk Models):** `RiskStatus`, `HaltReason`, `RiskConfig`, `PositionSizeResult`, `KillSwitchState` e `RiskVerdict` + 33 testes unitários.
+5. **Fase 4 / Task 4.3 (Position Sizing):** `PositionSizer` em `src/risk/sizing.py` (lotes B3, 0,03% fee, risco estrito 2%) + 23 testes unitários.

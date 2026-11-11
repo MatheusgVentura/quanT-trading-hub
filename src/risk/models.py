@@ -6,7 +6,7 @@ from datetime import date
 from enum import Enum
 from typing import Literal
 
-from src.risk.exceptions import RiskConfigurationError
+from src.risk.exceptions import RiskConfigurationError, RiskError
 
 
 class RiskStatus(str, Enum):
@@ -25,13 +25,17 @@ class HaltReason(str, Enum):
     LATENCY_LIMIT = "LATENCY_LIMIT"
 
 
-def _require_finite_number(value: object, field_name: str) -> float:
+def require_finite_number(
+    value: object,
+    field_name: str,
+    exc_cls: type[RiskError] = RiskConfigurationError,
+) -> float:
     """Validate that a value is a non-boolean finite float/int."""
     if isinstance(value, bool) or not isinstance(value, (int, float)):
-        raise RiskConfigurationError(f"{field_name} must be a numeric value.")
+        raise exc_cls(f"{field_name} must be a numeric value.")
     num = float(value)
     if not math.isfinite(num):
-        raise RiskConfigurationError(f"{field_name} must be finite.")
+        raise exc_cls(f"{field_name} must be finite.")
     return num
 
 
@@ -45,7 +49,7 @@ def _validate_range(
     max_inclusive: bool = False,
 ) -> float:
     """Validate that a numeric parameter lies within the expected interval."""
-    num = _require_finite_number(value, field_name)
+    num = require_finite_number(value, field_name)
     lower_ok = num >= min_val if min_inclusive else num > min_val
     upper_ok = num <= max_val if max_inclusive else num < max_val
     if not (lower_ok and upper_ok):
@@ -76,7 +80,7 @@ class RiskConfig:
 
     def __post_init__(self) -> None:
         """Validate all configuration parameters on instantiation."""
-        cap = _require_finite_number(self.initial_capital, "initial_capital")
+        cap = require_finite_number(self.initial_capital, "initial_capital")
         if cap <= 0.0:
             raise RiskConfigurationError(
                 f"initial_capital must be strictly positive, got {cap}."
@@ -154,7 +158,7 @@ class RiskConfig:
             max_inclusive=False,
         )
 
-        latency = _require_finite_number(self.max_latency_ms, "max_latency_ms")
+        latency = require_finite_number(self.max_latency_ms, "max_latency_ms")
         if latency <= 0.0:
             raise RiskConfigurationError(
                 f"max_latency_ms must be strictly positive, got {latency}."

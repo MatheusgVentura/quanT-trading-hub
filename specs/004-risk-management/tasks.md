@@ -6,7 +6,7 @@
 
 - [x] **Task 4.1:** Define typed exception hierarchy (`RiskError`, `RiskConfigurationError`, `InvalidRiskInputError`, `KillSwitchTriggeredError`) in `src/risk/exceptions.py` with unit tests. *(Mapped to: AC09, AC10)*
 - [x] **Task 4.2:** Implement validated configuration and verdict models (`RiskStatus`, `RiskConfig`, `PositionSizeResult`, `RiskVerdict`, `KillSwitchState`) in `src/risk/models.py` with boundary validation tests. *(Mapped to: AC01, AC02, AC03, AC10)*
-- [ ] **Task 4.3:** Implement `PositionSizer` in `src/risk/sizing.py` supporting B3 fractional/standard lot rounding, B3 0.03% fee buffer, cash guard, and fixed-fractional risk sizing rules with unit tests. *(Mapped to: AC03, AC05, AC10)*
+- [x] **Task 4.3:** Implement `PositionSizer` in `src/risk/sizing.py` supporting B3 fractional/standard lot rounding, B3 0.03% fee buffer, cash guard, and fixed-fractional risk sizing rules with unit tests. *(Mapped to: AC03, AC05, AC10)*
 - [ ] **Task 4.4:** Implement `StopMonitor` in `src/risk/stops.py` supporting fixed stop-loss and trailing stop high-water mark tracking with unit tests. *(Mapped to: AC07, AC08, AC10)*
 - [ ] **Task 4.5:** Implement `KillSwitch` in `src/risk/kill_switch.py` enforcing daily loss limit (`>= 2%`), latency threshold (`> 500ms`), max drawdown circuit breaker, and reset policies with unit tests. *(Mapped to: AC01, AC02, AC06, AC09, AC10)*
 - [ ] **Task 4.6:** Implement `RiskManager` and backtest risk overlay in `src/risk/manager.py` (integrating Swing Trade guard, StopMonitor, KillSwitch, PositionSizer, and re-entry suppression) and export public API in `src/risk/__init__.py`. *(Mapped to: AC04, AC09, AC11)*

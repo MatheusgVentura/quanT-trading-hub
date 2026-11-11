@@ -14,6 +14,7 @@ from src.risk.models import (
     RiskStatus,
     RiskVerdict,
 )
+from src.risk.sizing import PositionSizer
 
 __all__ = [
     "HaltReason",
@@ -21,6 +22,7 @@ __all__ = [
     "KillSwitchState",
     "KillSwitchTriggeredError",
     "PositionSizeResult",
+    "PositionSizer",
     "RiskConfig",
     "RiskConfigurationError",
     "RiskError",
