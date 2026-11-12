@@ -22,6 +22,7 @@ from src.execution.models import (
     format_b3_execution_symbol,
 )
 from src.execution.paper_broker import SimulatedPaperBroker
+from src.execution.router import OrderRouter
 from src.execution.sandbox_broker import RestSandboxBroker
 
 __all__ = [
@@ -37,6 +38,7 @@ __all__ = [
     "OrderReceipt",
     "OrderRejectedError",
     "OrderRequest",
+    "OrderRouter",
     "OrderSide",
     "OrderStatus",
     "OrderType",
