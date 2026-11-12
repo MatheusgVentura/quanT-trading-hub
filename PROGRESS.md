@@ -6,15 +6,15 @@ Documento dinâmico contendo o estado atual, decisões ativas e próximos passos
 
 ## Estado atual
 * **Fases concluídas:** 000 (Setup/SDD), 001 (Data), 002 (Backtest), 003 (Strategy EMA), 004 (Risk & Kill-Switch).
-* **Fase ativa:** 005 — Paper Trading & Execução Resiliente (`specs/005-execution-paper/`), Tasks 5.1–5.6 concluídas.
-* **Branch:** `main` | **Qualidade:** 266 testes passando (94% de cobertura), mypy strict e ruff 100%.
+* **Fase ativa:** 005 — Paper Trading & Execução Resiliente (`specs/005-execution-paper/`), Tasks 5.1–5.7 concluídas.
+* **Branch:** `main` | **Qualidade:** 271 testes passando (94% de cobertura), mypy strict e ruff 100%.
 
 ## Em andamento
-* Implementação da Fase 5 (`src/execution/`). Próxima tarefa: Task 5.7 (testes de integração B3).
+* Implementação da Fase 5 (`src/execution/`). Próxima tarefa: Task 5.8 (Fechamento Fase 005).
 
 ## Próximos passos
-1. Executar Task 5.7: criar `tests/integration/test_b3_paper_execution.py` validando EMA 9/21 + `RiskManager` + `OrderRouter` + `SimulatedPaperBroker` em B3 (`ITUB4.SA`, `PETR4.SA`, `VALE3.SA`, `WEGE3.SA`) com R$ 100 e reload de estado persistido.
-2. Concluir Task 5.8: validação final de qualidade e fechamento da Fase 5.
+1. Executar Task 5.8: auditoria final de qualidade (`ruff`, `mypy --strict`, `pytest --cov=src -v`) e conclusão da Fase 5 (`README.md` e `PROGRESS.md`).
+2. Preparar Spec da Fase 6 (Dashboard Interativo Web em Streamlit / Plotly).
 
 ## Decisões ativas
 * **Metodologia:** SDD estrito (tríade `spec.md`, `plan.md`, `tasks.md` antes de qualquer código).
@@ -27,8 +27,8 @@ Documento dinâmico contendo o estado atual, decisões ativas e próximos passos
 * Nenhum bloqueio ativo.
 
 ## Entregas concluídas (últimas 5)
-1. **Fase 5 / Task 5.2 (Models & Broker ABC):** `ExecutionConfig`, modelos de ordem/conta, `format_b3_execution_symbol` e `IBrokerAdapter` + 34 testes unitários.
-2. **Fase 5 / Task 5.3 (SimulatedPaperBroker):** B3 `'F'`, taxa 0,03%, `MARKET`/`LIMIT`, reserva de caixa/custódia, idempotência e JSON atômico em `src/execution/paper_broker.py` + 26 testes unitários.
-3. **Fase 5 / Task 5.4 (RestSandboxBroker):** Cliente REST stdlib `urllib` + HMAC-SHA256 / `.env`, allowlist estrita de URLs sandbox e timeouts em `src/execution/sandbox_broker.py` + 35 testes mockados.
-4. **Fase 5 / Task 5.5 (OrderRouter):** Roteador idempotente (`client_order_id`), retries exponential backoff, sync pós-reconexão, gate `RiskManager` e Kill-Switch em `src/execution/router.py` + 13 testes unitários.
-5. **Fase 5 / Task 5.6 (Runner, CLI & Exports):** `PaperTradingRunner`, `PaperSimulationReport` (ledger atômico JSON/Parquet) em `src/execution/runner.py`, entrypoint thin `sys.exit(1)` em `cli.py` e exports em `__init__.py` + 9 testes unitários.
+1. **Fase 5 / Task 5.3 (SimulatedPaperBroker):** B3 `'F'`, taxa 0,03%, `MARKET`/`LIMIT`, reserva de caixa/custódia, idempotência e JSON atômico em `src/execution/paper_broker.py` + 26 testes unitários.
+2. **Fase 5 / Task 5.4 (RestSandboxBroker):** Cliente REST stdlib `urllib` + HMAC-SHA256 / `.env`, allowlist estrita de URLs sandbox e timeouts em `src/execution/sandbox_broker.py` + 35 testes mockados.
+3. **Fase 5 / Task 5.5 (OrderRouter):** Roteador idempotente (`client_order_id`), retries exponential backoff, sync pós-reconexão, gate `RiskManager` e Kill-Switch em `src/execution/router.py` + 13 testes unitários.
+4. **Fase 5 / Task 5.6 (Runner, CLI & Exports):** `PaperTradingRunner`, `PaperSimulationReport` (ledger atômico JSON/Parquet) em `src/execution/runner.py`, entrypoint thin `sys.exit(1)` em `cli.py` e exports em `__init__.py` + 9 testes unitários.
+5. **Fase 5 / Task 5.7 (Integração B3 Paper):** Testes end-to-end em `tests/integration/test_b3_paper_execution.py` com EMA 9/21 + `RiskManager` + `OrderRouter` + `SimulatedPaperBroker` (B3, R$ 100 e reload persistido) + 5 testes.
