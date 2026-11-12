@@ -11,5 +11,5 @@
 - [x] **Task 4.5:** Implement `KillSwitch` in `src/risk/kill_switch.py` enforcing daily loss limit (`>= 2%`), latency threshold (`> 500ms`), max drawdown circuit breaker, and reset policies with unit tests. *(Mapped to: AC01, AC02, AC06, AC09, AC10)*
 - [x] **Task 4.6:** Implement `RiskManager` and backtest risk overlay in `src/risk/manager.py` (integrating Swing Trade guard, StopMonitor, KillSwitch, PositionSizer, and re-entry suppression) and export public API in `src/risk/__init__.py`. *(Mapped to: AC04, AC09, AC11)*
 - [x] **Task 4.7:** Implement integration tests in `tests/integration/test_b3_risk_backtest.py` comparing unconstrained EMA 9/21 vs risk-managed EMA 9/21 across the 4 B3 equities (`ITUB4.SA`, `PETR4.SA`, `VALE3.SA`, `WEGE3.SA`) over `2021-11-01` to `2024-11-01`. *(Mapped to: AC12)*
-- [ ] **Task 4.8:** Final quality gate verification (`ruff check .`, `ruff format --check .`, `mypy --strict src tests`, `pytest --cov=src -v`) and update `PROGRESS.md`.
+- [x] **Task 4.8:** Final quality gate verification (`ruff check .`, `ruff format --check .`, `mypy --strict src tests`, `pytest --cov=src -v`) and update `PROGRESS.md`.
 
