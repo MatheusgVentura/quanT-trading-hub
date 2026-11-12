@@ -6,6 +6,7 @@ from src.risk.exceptions import (
     RiskConfigurationError,
     RiskError,
 )
+from src.risk.kill_switch import KillSwitch
 from src.risk.models import (
     HaltReason,
     KillSwitchState,
@@ -20,6 +21,7 @@ from src.risk.stops import StopCheckResult, StopMonitor, StopTrigger
 __all__ = [
     "HaltReason",
     "InvalidRiskInputError",
+    "KillSwitch",
     "KillSwitchState",
     "KillSwitchTriggeredError",
     "PositionSizeResult",
