@@ -6,15 +6,14 @@ Documento dinâmico contendo o estado atual, decisões ativas e próximos passos
 
 ## Estado atual
 * **Fases concluídas:** 000 (Setup/SDD), 001 (Data), 002 (Backtest), 003 (Strategy EMA), 004 (Risk & Kill-Switch), 005 (Execution & Paper Trading).
-* **Fase ativa:** Nenhuma (Fase 005 encerrada; pronta para Spec 006).
+* **Fase ativa:** `006-dashboard` (Spec aprovada; iniciando Task 6.1).
 * **Branch:** `main` | **Qualidade:** 271 testes passando (94% de cobertura), mypy strict e ruff 100%.
 
 ## Em andamento
-* Fase 5 finalizada e validada. Aguardando início da Fase 6 (Dashboard Interativo Web).
+* Task 6.1 (`specs/006-dashboard/tasks.md`): Dependências Streamlit/Plotly e configuração mypy.
 
 ## Próximos passos
-1. Elaborar `specs/006-dashboard/` (`spec.md`, `plan.md`, `tasks.md`) para Dashboard Interativo Web (Streamlit / Plotly) em `src/dashboard/`.
-2. Submeter a Spec 006 para aprovação explícita antes da implementação.
+1. Executar Tasks 6.1–6.8 de `specs/006-dashboard/tasks.md` uma entrega por vez.
 
 ## Decisões ativas
 * **Metodologia:** SDD estrito (tríade `spec.md`, `plan.md`, `tasks.md` antes de qualquer código).
