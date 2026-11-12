@@ -6,15 +6,15 @@ Documento dinâmico contendo o estado atual, decisões ativas e próximos passos
 
 ## Estado atual
 * **Fases concluídas:** 000 (Setup/SDD), 001 (Data), 002 (Backtest), 003 (Strategy EMA), 004 (Risk & Kill-Switch), 005 (Execution & Paper Trading).
-* **Fase ativa:** `006-dashboard` (Task 6.5 concluída; próxima: Task 6.6).
+* **Fase ativa:** `006-dashboard` (Task 6.6 concluída; próxima: Task 6.7).
 * **Branch:** `main` | **Qualidade:** Suíte verde (`ruff`, `mypy --strict`, `pytest`).
 
 ## Em andamento
 * Implementação da Fase 6 (`src/dashboard/`): seguindo Tasks 6.1–6.8 de `specs/006-dashboard/tasks.md`.
 
 ## Próximos passos
-1. Task 6.6: Interface Streamlit (`components.py`, `app.py`, `__init__.py`) + testes headless `AppTest`.
-2. Tasks 6.7–6.8: Testes de integração pipeline completo e quality gate final / `README.md`.
+1. Task 6.7: Testes de integração end-to-end em `tests/integration/test_dashboard_pipeline.py` (pipeline completo + ledger JSON round-trip sem rede).
+2. Task 6.8: Atualizar `README.md`, checagem final dos quality gates e encerramento em `PROGRESS.md`.
 
 ## Decisões ativas
 * **Metodologia:** SDD estrito (tríade `spec.md`, `plan.md`, `tasks.md` antes de qualquer código).
