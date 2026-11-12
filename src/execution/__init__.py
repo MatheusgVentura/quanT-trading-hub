@@ -21,6 +21,7 @@ from src.execution.models import (
     PositionSnapshot,
     format_b3_execution_symbol,
 )
+from src.execution.paper_broker import SimulatedPaperBroker
 
 __all__ = [
     "AccountSnapshot",
@@ -39,5 +40,6 @@ __all__ = [
     "OrderStatus",
     "OrderType",
     "PositionSnapshot",
+    "SimulatedPaperBroker",
     "format_b3_execution_symbol",
 ]
