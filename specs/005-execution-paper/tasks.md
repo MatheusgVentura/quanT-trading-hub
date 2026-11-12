@@ -4,7 +4,7 @@
 
 ---
 
-- [ ] **Task 5.1:** Define typed exception hierarchy (`ExecutionError`, `ExecutionConfigurationError`, `InvalidOrderError`, `BrokerConnectionError`, `OrderRejectedError`, `ExecutionHaltedError`) in `src/execution/exceptions.py` with unit tests. *(Mapped to: AC08)*
+- [x] **Task 5.1:** Define typed exception hierarchy (`ExecutionError`, `ExecutionConfigurationError`, `InvalidOrderError`, `BrokerConnectionError`, `OrderRejectedError`, `ExecutionHaltedError`) in `src/execution/exceptions.py` with unit tests. *(Mapped to: AC08)*
 - [ ] **Task 5.2:** Implement validated execution contracts and models (`OrderSide`, `OrderType`, `OrderStatus`, `ExecutionConfig`, `OrderRequest`, `OrderReceipt`, `PositionSnapshot`, `AccountSnapshot`, `ExecutionStepResult`) in `src/execution/models.py` and `IBrokerAdapter` in `src/execution/interfaces.py` with boundary tests. *(Mapped to: AC05, AC08)*
 - [ ] **Task 5.3:** Implement `SimulatedPaperBroker` in `src/execution/paper_broker.py` supporting B3 fractional `'F'` execution symbols, `0.03%` B3 fee / RLP zero brokerage, `MARKET` & `LIMIT` fills, cash/custody accounting, idempotency, and atomic JSON state persistence with unit tests. *(Mapped to: AC04, AC05, AC07, AC08, AC10)*
 - [ ] **Task 5.4:** Implement `RestSandboxBroker` in `src/execution/sandbox_broker.py` using stdlib `urllib` + HMAC-SHA256 / `.env` credentials with strict sandbox URL enforcement, timeout mapping, and mocked unit tests. *(Mapped to: AC08, AC09)*
