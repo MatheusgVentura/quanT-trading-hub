@@ -6,14 +6,15 @@ Documento dinâmico contendo o estado atual, decisões ativas e próximos passos
 
 ## Estado atual
 * **Fases concluídas:** 000 (Setup/SDD), 001 (Data), 002 (Backtest), 003 (Strategy EMA), 004 (Risk & Kill-Switch), 005 (Execution & Paper Trading).
-* **Fase ativa:** `006-dashboard` (Spec aprovada; iniciando Task 6.1).
+* **Fase ativa:** `006-dashboard` (Task 6.1 concluída; próxima: Task 6.2).
 * **Branch:** `main` | **Qualidade:** 271 testes passando (94% de cobertura), mypy strict e ruff 100%.
 
 ## Em andamento
-* Task 6.1 (`specs/006-dashboard/tasks.md`): Dependências Streamlit/Plotly e configuração mypy.
+* Implementação da Fase 6 (`src/dashboard/`): seguindo Tasks 6.1–6.8 de `specs/006-dashboard/tasks.md`.
 
 ## Próximos passos
-1. Executar Tasks 6.1–6.8 de `specs/006-dashboard/tasks.md` uma entrega por vez.
+1. Task 6.2: Exceções e contratos validados (`src/dashboard/exceptions.py` e `models.py`) + testes unitários.
+2. Tasks 6.3–6.8: Tema visual, `DashboardService`, builders Plotly, Streamlit UI, integração e quality gate.
 
 ## Decisões ativas
 * **Metodologia:** SDD estrito (tríade `spec.md`, `plan.md`, `tasks.md` antes de qualquer código).
@@ -26,7 +27,7 @@ Documento dinâmico contendo o estado atual, decisões ativas e próximos passos
 * Nenhum bloqueio ativo.
 
 ## Entregas concluídas (últimas 5)
-1. **Fase 5 / Task 5.4 (RestSandboxBroker):** Cliente REST stdlib `urllib` + HMAC-SHA256 / `.env`, allowlist estrita de URLs sandbox e timeouts em `src/execution/sandbox_broker.py` + 35 testes mockados.
+1. **Fase 6 / Task 6.1 (Deps & Mypy):** `streamlit>=1.38.0` (`1.65.0`) e `plotly>=5.22.0` (`7.1.0`) adicionados em `requirements.txt`/instalados e `[mypy-plotly.*]` configurado em `mypy.ini`.
 2. **Fase 5 / Task 5.5 (OrderRouter):** Roteador idempotente (`client_order_id`), retries exponential backoff, sync pós-reconexão, gate `RiskManager` e Kill-Switch em `src/execution/router.py` + 13 testes unitários.
 3. **Fase 5 / Task 5.6 (Runner, CLI & Exports):** `PaperTradingRunner`, `PaperSimulationReport` (ledger atômico JSON/Parquet) em `src/execution/runner.py`, entrypoint thin `sys.exit(1)` em `cli.py` e exports em `__init__.py` + 9 testes unitários.
 4. **Fase 5 / Task 5.7 (Integração B3 Paper):** Testes end-to-end em `tests/integration/test_b3_paper_execution.py` com EMA 9/21 + `RiskManager` + `OrderRouter` + `SimulatedPaperBroker` (B3, R$ 100 e reload persistido) + 5 testes.

@@ -4,7 +4,7 @@
 
 ---
 
-- [ ] **Task 6.1:** Add `streamlit` and `plotly` dependencies to `requirements.txt` (and configure `mypy.ini` missing-import overrides only if required for untyped third-party stubs) and install in `venv`. *(Mapped to: AC12)*
+- [x] **Task 6.1:** Add `streamlit` and `plotly` dependencies to `requirements.txt` (and configure `mypy.ini` missing-import overrides only if required for untyped third-party stubs) and install in `venv`. *(Mapped to: AC12)*
 - [ ] **Task 6.2:** Implement typed dashboard exceptions (`DashboardError`, `DashboardConfigurationError`, `DashboardDataError`, `LedgerLoadError`) in `src/dashboard/exceptions.py` and validated contracts (`PresetAsset`, `B3_PRESET_ASSETS`, `DashboardParameters`, `RiskTelemetrySnapshot`, `LoadedLedgerSummary`, `DashboardSnapshot`) in `src/dashboard/models.py` with comprehensive unit tests. *(Mapped to: AC01, AC04, AC09)*
 - [ ] **Task 6.3:** Implement the intentional visual design system (`frontend-design` CSS tokens, typography, accessible reduced-motion rules, XSS-safe HTML card builders, and `apply_plotly_theme`) in `src/dashboard/theme.py` with unit tests verifying palette tokens, theme styling, and HTML escaping. *(Mapped to: AC03, AC09)*
 - [ ] **Task 6.4:** Implement `DashboardService` in `src/dashboard/service.py` unifying `IDataProvider`, `StrategyBacktestRunner`, `RiskManager`, and `PaperTradingRunner`, plus safe bounded Phase 5 Ledger JSON parsing/loading (`parse_ledger_payload`, `load_ledger_json`) with mocked unit tests. *(Mapped to: AC02, AC04, AC08, AC09, AC11)*
