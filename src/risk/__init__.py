@@ -7,6 +7,7 @@ from src.risk.exceptions import (
     RiskError,
 )
 from src.risk.kill_switch import KillSwitch
+from src.risk.manager import RiskManager
 from src.risk.models import (
     HaltReason,
     KillSwitchState,
@@ -29,6 +30,7 @@ __all__ = [
     "RiskConfig",
     "RiskConfigurationError",
     "RiskError",
+    "RiskManager",
     "RiskStatus",
     "RiskVerdict",
     "StopCheckResult",
