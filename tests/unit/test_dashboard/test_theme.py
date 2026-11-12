@@ -109,4 +109,3 @@ def test_ac03_apply_plotly_theme_sets_consistent_layout() -> None:
     assert themed.layout.title.text == "Equity Curve"
     assert themed.layout.yaxis.title.text == "R$"
     assert themed.layout.xaxis.title.text == "Date"
-
