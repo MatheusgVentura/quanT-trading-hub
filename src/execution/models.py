@@ -1,6 +1,9 @@
 """Validated data models, enums, and configuration for order execution."""
 
 import math
+import os
+import tempfile
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
 from enum import Enum
@@ -99,6 +102,44 @@ def _require_unit_fraction(
     if num < 0.0 or num >= 1.0:
         raise exc_cls(f"{field_name} must be in [0.0, 1.0), got {num}.")
     return num
+
+
+def _atomic_write_text(target: Path, payload: str) -> None:
+    """Write UTF-8 text atomically via a same-directory temp file and os.replace."""
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp_name = tempfile.mkstemp(
+        dir=str(target.parent),
+        prefix=f".{target.stem}_",
+        suffix=".tmp",
+    )
+    tmp_path = Path(tmp_name)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            fh.write(payload)
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(tmp_path, target)
+    finally:
+        if tmp_path.exists():
+            tmp_path.unlink(missing_ok=True)
+
+
+def _atomic_write_via_path(target: Path, writer: Callable[[Path], None]) -> None:
+    """Write binary/structured artifacts atomically via a temp path and os.replace."""
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp_name = tempfile.mkstemp(
+        dir=str(target.parent),
+        prefix=f".{target.stem}_",
+        suffix=f"{target.suffix}.tmp",
+    )
+    os.close(fd)
+    tmp_path = Path(tmp_name)
+    try:
+        writer(tmp_path)
+        os.replace(tmp_path, target)
+    finally:
+        if tmp_path.exists():
+            tmp_path.unlink(missing_ok=True)
 
 
 def format_b3_execution_symbol(

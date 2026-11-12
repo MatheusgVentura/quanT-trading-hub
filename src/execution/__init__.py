@@ -1,5 +1,6 @@
 """Order execution, broker abstraction, and paper trading layer."""
 
+from src.execution.cli import main as cli_main
 from src.execution.exceptions import (
     BrokerConnectionError,
     ExecutionConfigurationError,
@@ -23,6 +24,7 @@ from src.execution.models import (
 )
 from src.execution.paper_broker import SimulatedPaperBroker
 from src.execution.router import OrderRouter
+from src.execution.runner import PaperSimulationReport, PaperTradingRunner
 from src.execution.sandbox_broker import RestSandboxBroker
 
 __all__ = [
@@ -42,8 +44,11 @@ __all__ = [
     "OrderSide",
     "OrderStatus",
     "OrderType",
+    "PaperSimulationReport",
+    "PaperTradingRunner",
     "PositionSnapshot",
     "RestSandboxBroker",
     "SimulatedPaperBroker",
+    "cli_main",
     "format_b3_execution_symbol",
 ]

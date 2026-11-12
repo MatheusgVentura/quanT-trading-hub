@@ -3,9 +3,8 @@
 from __future__ import annotations
 
 import json
-import os
-import tempfile
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -28,6 +27,7 @@ from src.execution.models import (
     OrderStatus,
     OrderType,
     PositionSnapshot,
+    _atomic_write_text,
     _require_bool,
     _require_finite_number,
     _require_int,
@@ -102,6 +102,7 @@ class SimulatedPaperBroker(IBrokerAdapter):
 
         if clock is not None and not callable(clock):
             raise ExecutionConfigurationError("clock must be callable or None.")
+        self._has_custom_clock: bool = clock is not None
         self._clock: Callable[[], datetime] = clock or _utc_now
 
         lat = _require_finite_number(
@@ -160,6 +161,23 @@ class SimulatedPaperBroker(IBrokerAdapter):
                 f"latency_ms cannot be negative, got {lat}."
             )
         self._simulated_latency_ms = lat
+
+    @property
+    def has_custom_clock(self) -> bool:
+        """Return True when the broker was instantiated with a custom clock."""
+        return self._has_custom_clock
+
+    @contextmanager
+    def temporary_clock(self, clock: Callable[[], datetime]) -> Iterator[None]:
+        """Temporarily override clock while executing historical simulations."""
+        if not callable(clock):
+            raise ExecutionConfigurationError("clock must be callable.")
+        previous = self._clock
+        self._clock = clock
+        try:
+            yield
+        finally:
+            self._clock = previous
 
     # ------------------------------------------------------------------
     # Buying power, custody & history views
@@ -657,24 +675,8 @@ class SimulatedPaperBroker(IBrokerAdapter):
         target = self.config.state_path
         if target is None:
             return
-        target.parent.mkdir(parents=True, exist_ok=True)
         payload = json.dumps(self._serialize_state(), indent=2, sort_keys=True)
-        fd, tmp_name = tempfile.mkstemp(
-            dir=str(target.parent),
-            prefix=f".{target.stem}_",
-            suffix=".tmp",
-        )
-        tmp_path = Path(tmp_name)
-        try:
-            with os.fdopen(fd, "w", encoding="utf-8") as fh:
-                fh.write(payload)
-                fh.flush()
-                os.fsync(fh.fileno())
-            os.replace(tmp_path, target)
-        except Exception:
-            if tmp_path.exists():
-                tmp_path.unlink(missing_ok=True)
-            raise
+        _atomic_write_text(target, payload)
 
     def _serialize_state(self) -> dict[str, Any]:
         return {
