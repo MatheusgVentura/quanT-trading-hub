@@ -104,10 +104,10 @@ mypy src
 
 - [x] **Fase 0:** Setup de Governança (SDD, `CLAUDE.md`, `AGENTS.md`)
 - [x] **Fase 1:** Módulo de Infraestrutura de Dados e Validação (`src/data/`)
-- [ ] **Fase 2:** Motor de Backtesting Vetorizado e Métricas de Risco (`src/backtest/`)
-- [ ] **Fase 3:** Interface de Estratégias e Estratégia de Médias Móveis (`src/strategies/`)
-- [ ] **Fase 4:** Gestão de Risco e Kill-Switch (`src/risk/`)
-- [ ] **Fase 5:** Paper Trading e Execução em Sandbox (`src/execution/`)
+- [x] **Fase 2:** Motor de Backtesting Vetorizado e Métricas de Risco (`src/backtest/`)
+- [x] **Fase 3:** Interface de Estratégias e Estratégia de Médias Móveis (`src/strategies/`)
+- [x] **Fase 4:** Gestão de Risco e Kill-Switch (`src/risk/`)
+- [ ] **Fase 5:** Paper Trading e Execução em Sandbox (`src/execution/`) — *Em andamento (Tasks 5.1–5.2 concluídas)*
 - [ ] **Fase 6:** Dashboard Interativo Web (Streamlit / Plotly)
 
 ---
